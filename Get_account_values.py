@@ -1,5 +1,8 @@
 # import
 import json
+# use official coinbase api
+### https://pypi.org/project/coinbase/
+### https://github.com/coinbase/coinbase-python/
 from coinbase.wallet.client import Client
 
 # Loading configuration
@@ -7,8 +10,9 @@ with open('config.json') as datas_config:
    json_config = json.load(datas_config)
 
 # Init coinbase connection
-def coinbase_connect(json_config:json):
-    coinbase_api_key
+def get_client(json_config:json):
+    coinbase_api_key = ""
+    coinbase_api_secret = ""
     if "coinbase_api_key" in json_config:
         coinbase_api_key = json_config['coinbase_api_key'];
     if "coinbase_api_secret" in json_config:
@@ -16,65 +20,33 @@ def coinbase_connect(json_config:json):
     if (coinbase_api_key != "" and coinbase_api_secret != "") :
         return Client(coinbase_api_key, coinbase_api_secret)
 
-client = coinbase_connect(json_config)
+# Append all pagined accounts to only one array
+def get_all_accounts(client: object()):
+    all_accounts = []
+    starting_after = None
+    # infinite loop
+    while True:
+        accounts = client.get_accounts(limit=100, starting_after=starting_after)
+        # if pagination exist then push all account in array and loop again
+        if accounts.pagination.next_starting_after is not None:
+            starting_after = accounts.pagination.next_starting_after
+            for account in accounts.data:
+                all_accounts.append(account)
+            time.sleep(1)
+        # if pagination don't exist then push all account in array and exit loop
+        else:
+            for account in accounts.data:
+                all_accounts.append(account)
+            break
+    return all_accounts
 
-
-currencies_list = [
-    "ETH",
-    "BTC",
-    "LINK",
-    "MANA",
-    "FIL",
-    "MKR",
-    "ADA",
-    "SHIB",
-    "XLM",
-    "UNI",   
-    "LTC",
-    "ALGO",
-    "AMP",
-    "BAT",
-    "DOGE",
-    "OXT",
-    "XTZ",
-    "CRO",
-    "ANKR",
-    "SOL",
-    "CTSI",
-    "NU",
-    "FET",
-    "CLV",
-    "AUCTION",
-    "LRC",
-    "GRT",
-    "SKL",
-    "ICP",
-    "FORTH",
-    "DAI",
-    "ALCX",
-    "GALA",
-    "POLY"
-    ]
-
-def total():    
-    total = 0
-
-    for c in currencies_list:
-        total += valeur(c)
-    return round(total, 2)
-
-def valeur(wallets: str):
-    account = client.get_account(wallets)
-    #convert to dict.
-    accountdict = json.loads(json.dumps(account))
-
-    #using dict to get the current BTC balance
-    balance = round(float(accountdict['balance']['amount']),2)
-    nativebalance = round(float(accountdict['native_balance']['amount']),2)
-    print (wallets , "Quantité ",  balance, " Valeur ", nativebalance, "EUR" )
-    return float(accountdict['native_balance']['amount'])
-
-
-
-total()
-print("Total: ", total(), "EUR")
+# Main Script
+client = get_client(json_config)
+accounts = get_all_accounts(client)
+total = 0
+for currency in accounts:
+    amount = float(currency.native_balance.amount)
+    if amount > 0:
+        total += amount
+        print("# " + currency.currency + " : " + str(amount) + " " + currency.native_balance.currency)
+print("########## Total : " + str(total))

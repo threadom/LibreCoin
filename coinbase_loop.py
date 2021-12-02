@@ -21,7 +21,7 @@ from os import system
 from coinbase.wallet.client import Client
 
 # globals
-g_expire_time = 5
+g_expire_time = 50
 
 # Loading configuration
 with open('config.json') as datas_config:
@@ -331,12 +331,23 @@ while looping is True:
     # print(g_diff_transaction) 
 
     system('cls')
-    print(g_owned_currencies) 
-    print(g_sum_transaction) 
-    print(g_diff_transaction) 
-    print('{:60}'.format("Total: "))
+    line = "Currency".rjust(14) + " |"
+    line += "Amount".rjust(14) + " |"
+    line += "Transactions".rjust(14) + " |"
+    line += "Gain".rjust(14) + " |"
+    print(line)
 
-    time.sleep(15)
+    line = "".rjust(64,"-")
+    print(line)
+
+    for currency in g_owned_currencies:
+        line = currency.rjust(14) + " |"
+        line += str(math.floor(g_owned_currencies[currency]*100)/100).rjust(12) + " € |"
+        line += str(math.floor(g_sum_transaction[currency]*100)/100).rjust(12) + " € |"
+        line += str(math.floor(g_diff_transaction[currency]*100)/100).rjust(12) + " € |"
+        print(line)
+
+    time.sleep(60)
 
 
 # class CoinbaseWalletAuth(AuthBase):

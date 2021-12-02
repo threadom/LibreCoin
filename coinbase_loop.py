@@ -340,12 +340,29 @@ while looping is True:
     line = "".rjust(64,"-")
     print(line)
 
+    total = { 'amount' : 0, 'transactions' : 0, 'gain' : 0 }
     for currency in g_owned_currencies:
+
         line = currency.rjust(14) + " |"
         line += str(math.floor(g_owned_currencies[currency]*100)/100).rjust(12) + " € |"
+        total['amount'] += g_owned_currencies[currency]
+
         line += str(math.floor(g_sum_transaction[currency]*100)/100).rjust(12) + " € |"
+        total['transactions'] += g_sum_transaction[currency]
+
         line += str(math.floor(g_diff_transaction[currency]*100)/100).rjust(12) + " € |"
+        total['gain'] += g_diff_transaction[currency]
+
         print(line)
+
+    line = "".rjust(64,"-")
+    print(line)
+
+    line = "Total ".rjust(14) + " |"
+    line += str(math.floor(total['amount']*100)/100).rjust(12) + " € |"
+    line += str(math.floor(total['transactions']*100)/100).rjust(12) + " € |"
+    line += str(math.floor(total['gain']*100)/100).rjust(12) + " € |"
+    print(line)
 
     time.sleep(60)
 

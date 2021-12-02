@@ -21,7 +21,7 @@ from os import system
 from coinbase.wallet.client import Client
 
 # globals
-g_expire_time = 10
+g_expire_time = 5
 
 # Loading configuration
 with open('config.json') as datas_config:
@@ -336,7 +336,7 @@ while looping is True:
     print(g_diff_transaction) 
     print('{:60}'.format("Total: "))
 
-    time.sleep(5)
+    time.sleep(15)
 
 
 # class CoinbaseWalletAuth(AuthBase):

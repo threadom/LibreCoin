@@ -221,12 +221,33 @@ def distribute_transactions_at_currency(currencies: json, transactions: json):
     for currency in currencies:
         distribute_transactions[currency] = []
         for transaction in transactions:
-            if (transaction['details']['payment_method_name'].endswith(currency)):
-                distribute_transactions[currency] += transaction
-            if (transaction['currency'] == currency):
-                distribute_transactions[currency] += transaction
+            # if 'payment_method_name' in transaction['details']:
+            #     if (transaction['details']['payment_method_name'].endswith(currency)):
+            #         distribute_transactions[currency].append(transaction)
+            if (transaction['amount']['currency'] == currency):
+                distribute_transactions[currency].append(transaction)
 
     return distribute_transactions
+
+def sum_transactions_by_currency(currencies: json, transactions: json):
+    print("sum_transactions_by_currency")
+    sum_transactions_by_currency = {}
+
+    for currency in currencies:
+        sum_transactions_by_currency[currency] = 0
+        for transaction in transactions[currency]:
+            sum_transactions_by_currency[currency] += float(transaction['native_amount']['amount'])
+
+    return sum_transactions_by_currency
+
+def diff_currencies_transactions(currencies: json, sum_transactions: json):
+    print("diff_currencies_transactions")
+    diff_currencies_transactions = {}
+
+    for currency in currencies:
+        diff_currencies_transactions[currency] = currencies[currency] - sum_transactions[currency]
+
+    return diff_currencies_transactions
 
 def store_as_cache(datas, file_name):
     # print("store_as_cache")
@@ -292,9 +313,15 @@ g_owned_currencies = get_owned_currencies(g_all_accounts)
 g_all_owned_transactions = get_all_owned_transactions(g_client, g_owned_currencies)
 #print(g_all_owned_transactions)
 g_all_ordered_transactions = sort_transactions_by_date(g_all_owned_transactions)
-# print(g_all_ordered_transactions)
+#print(g_all_ordered_transactions)
 g_all_distributed_transactions = distribute_transactions_at_currency(g_owned_currencies, g_all_ordered_transactions)
-store_as_cache(g_all_distributed_transactions, 'g_all_distributed_transactions')
+#print(g_all_ordered_tran)
+g_sum_transaction = sum_transactions_by_currency(g_owned_currencies, g_all_distributed_transactions)
+#print(g_sum_transaction) 
+g_diff_transaction = diff_currencies_transactions(g_owned_currencies, g_sum_transaction)
+print(g_diff_transaction) 
+
+
 # accounts = get_all_accounts(client)
 # total = 0
 # for currency in accounts:

@@ -12,15 +12,11 @@ import operator
 ### https://github.com/coinbase/coinbase-python/
 from coinbase.wallet.client import Client
 
-# globals
-g_owned_currencies = {}
-g_all_accounts = {}
-g_all_all_transactions = {}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-# Loading configuration
-with open('config.json') as datas_config:
-   json_config = json.load(datas_config)
-
+########################################################
 # Init coinbase connection
 def get_client(json_config:json):
     print("get_client")
@@ -33,12 +29,19 @@ def get_client(json_config:json):
     if (coinbase_api_key != "" and coinbase_api_secret != "") :
         return Client(coinbase_api_key, coinbase_api_secret)
 
+
+########################################################
 # Append all pagined accounts to only one array
+g_all_accounts = {}
 def get_all_accounts(client: object):
     print("get_all_accounts")
+
+    # read from globals if exist
     global g_all_accounts
     if len(g_all_accounts) > 0:
         return g_all_accounts
+
+    # do it if nothing else exist
     all_accounts = {}
     starting_after = None
     # infinite loop
@@ -55,29 +58,50 @@ def get_all_accounts(client: object):
             for account in accounts.data:
                 all_accounts[account.currency] = account
             break
+
+    # init globals before return
     g_all_accounts = all_accounts
     return g_all_accounts
 
+
+########################################################
 # sort transaction by transaction created date reversed
 def sort_owned_currencies_by_value(owned_currencies: object):
     return dict(sorted(owned_currencies.items(), key=operator.itemgetter(1), reverse=True))
 
+
+########################################################
 # get own currencies
+g_owned_currencies = {}
 def get_owned_currencies(accounts: json):
     print("get_owned_currencies")
     global g_owned_currencies
+
+    # read from globals if exist
     if len(g_owned_currencies) > 0:
         return g_owned_currencies 
+
+    # do it if nothing else exist
     owned_currencies = {}
     for currency in accounts:
         balance = float(accounts[currency].native_balance.amount)
         if (balance > 0):
             owned_currencies[currency] = float(accounts[currency].native_balance.amount)
+
+    # init globals before return
     g_owned_currencies = sort_owned_currencies_by_value(owned_currencies);
     return g_owned_currencies
 
-# Main Script
-client = get_client(json_config)
-accounts = get_all_accounts(client)
-currencies = get_owned_currencies(accounts)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~ MAIN SCRIPT ~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# Loading configuration
+with open('config.json') as datas_config:
+   json_config = json.load(datas_config)
+
+g_client = get_client(json_config)
+g_all_accounts = get_all_accounts(g_client)
+g_owned_currencies = get_owned_currencies(g_all_accounts)
 print(currencies)

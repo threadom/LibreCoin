@@ -24,23 +24,20 @@ def get_client(json_config:json):
 def get_all_accounts(client: object()):
     all_accounts = []
     starting_after = None
-    # infinite loop
     while True:
         accounts = client.get_accounts(limit=100, starting_after=starting_after)
-        # if pagination exist then push all account in array and loop again
         if accounts.pagination.next_starting_after is not None:
             starting_after = accounts.pagination.next_starting_after
             for account in accounts.data:
                 all_accounts.append(account)
             time.sleep(1)
-        # if pagination don't exist then push all account in array and exit loop
         else:
             for account in accounts.data:
                 all_accounts.append(account)
             break
     return all_accounts
 
-# Main Script
+# Main
 client = get_client(json_config)
 accounts = get_all_accounts(client)
 total = 0

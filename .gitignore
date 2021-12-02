@@ -1,1 +1,7 @@
 config.json
+*.ignore
+*.ignore.*
+*.cache
+*.cache.*
+cache/*
+!*Readme.md*

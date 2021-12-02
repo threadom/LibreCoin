@@ -11,6 +11,8 @@ import hashlib
 import datetime
 from os import path
 from os import makedirs
+# import for specific round numbers
+import math
 
 # use official coinbase api
 ### https://pypi.org/project/coinbase/
@@ -245,7 +247,7 @@ def diff_currencies_transactions(currencies: json, sum_transactions: json):
     diff_currencies_transactions = {}
 
     for currency in currencies:
-        diff_currencies_transactions[currency] = currencies[currency] - sum_transactions[currency]
+        diff_currencies_transactions[currency] = math.floor((currencies[currency] - sum_transactions[currency]) * 100) / 100
 
     return diff_currencies_transactions
 

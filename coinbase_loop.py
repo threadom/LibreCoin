@@ -20,13 +20,17 @@ from os import system
 ### https://github.com/coinbase/coinbase-python/
 from coinbase.wallet.client import Client
 
+
+########################################################
 # globals
 g_expire_time = 50
 
-# Loading configuration
-with open('config.json') as datas_config:
-   json_config = json.load(datas_config)
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+########################################################
 # Init md5 key for cache
 g_md5_key = "";
 def get_md5_key(json_config:json):
@@ -48,7 +52,9 @@ def get_md5_key(json_config:json):
     # init globals before return
     g_md5_key = hashlib.md5((coinbase_api_key + "|" + coinbase_api_secret).encode()).hexdigest();
     return g_md5_key
-    
+
+
+########################################################
 # Init coinbase connection
 def get_client(json_config:json):
     # print("get_client")
@@ -61,6 +67,8 @@ def get_client(json_config:json):
     if (coinbase_api_key != "" and coinbase_api_secret != "") :
         return Client(coinbase_api_key, coinbase_api_secret)
 
+
+########################################################
 # Append all pagined accounts to only one array
 g_all_accounts = {}
 def get_all_accounts(client: object):
@@ -103,10 +111,14 @@ def get_all_accounts(client: object):
     # return global ...
     return g_all_accounts
 
+
+########################################################
 # sort transaction by transaction created date reversed
 def sort_owned_currencies_by_value(owned_currencies: object):
     return dict(sorted(owned_currencies.items(), key=operator.itemgetter(1), reverse=True))
 
+
+########################################################
 # get own currencies
 g_owned_currencies = {}
 def get_owned_currencies(accounts: json):
@@ -138,12 +150,16 @@ def get_owned_currencies(accounts: json):
     # return global ...
     return g_owned_currencies
 
+
+########################################################
 # remove transaction tag
 def remove_transactions_tag(json_datas: json):
     rule = re.compile(r'<Transaction .*?>')
     str_datas = rule.sub('', json.dumps(json_datas))
     return json.loads(str_datas)
 
+
+########################################################
 #
 def get_all_transactions(client: object, account: str):
     # print("get_all_transactions : " + account)
@@ -167,6 +183,8 @@ def get_all_transactions(client: object, account: str):
             break
     return all_transactions
 
+
+########################################################
 #
 g_all_owned_transactions = {}
 def get_all_owned_transactions(client: object, owned_currencies: json):
@@ -198,24 +216,16 @@ def get_all_owned_transactions(client: object, owned_currencies: json):
     # return global ...
     return g_all_owned_transactions
 
-# # how to get and transform created date
-# def transactions_created_at(transaction: json):
-#     try:
-#         print(transaction)
-#         return transaction['created_at']
-#     except KeyError:
-#         return 0
 
-# # sort transaction by transaction created date reversed
-# def sort_transaction_by_date(transactions: object):
-#     transactions.sort(key=transactions_created_at, reverse=True)
-#     return transactions
-
+########################################################
 # sort transaction by transaction created date reversed
 def sort_transactions_by_date(transactions: json):
     # print("sort_transactions_by_date")
     transactions.sort(key = lambda x: x['created_at'])
     return transactions
+
+
+########################################################
 #
 def distribute_transactions_at_currency(currencies: json, transactions: json):
     # print("distribute_transactions_at_currency")
@@ -232,6 +242,9 @@ def distribute_transactions_at_currency(currencies: json, transactions: json):
 
     return distribute_transactions
 
+
+########################################################
+#
 def sum_transactions_by_currency(currencies: json, transactions: json):
     # print("sum_transactions_by_currency")
     sum_transactions_by_currency = {}
@@ -243,6 +256,9 @@ def sum_transactions_by_currency(currencies: json, transactions: json):
 
     return sum_transactions_by_currency
 
+
+########################################################
+#
 def diff_currencies_transactions(currencies: json, sum_transactions: json):
     # print("diff_currencies_transactions")
     diff_currencies_transactions = {}
@@ -252,6 +268,9 @@ def diff_currencies_transactions(currencies: json, sum_transactions: json):
 
     return diff_currencies_transactions
 
+
+########################################################
+#
 def store_as_cache(datas, file_name):
     # print("store_as_cache")
 
@@ -267,6 +286,9 @@ def store_as_cache(datas, file_name):
         print(f"Unexpected {err=}, {type(err)=}")
         return False;
 
+
+########################################################
+#
 def cache_exist(file_name):
     # print("cache_exist")
 
@@ -277,6 +299,9 @@ def cache_exist(file_name):
         return path_cache
     return False;
 
+
+########################################################
+#
 def cache_is_expired(path_cache):
     # print("cache_is_expired")
 
@@ -293,8 +318,10 @@ def cache_is_expired(path_cache):
     if current_date > (modify_date + g_expire_time):
         return True
     return False
-        
 
+
+########################################################
+#
 def read_from_cache(file_name):
     # print("read_from_cache")
 
@@ -304,64 +331,74 @@ def read_from_cache(file_name):
         return file_datas;
     return "";
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~ MAIN SCRIPT ~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# Loading configuration
+with open('config.json') as datas_config:
+   json_config = json.load(datas_config)
+   
 looping = True
 while looping is True:
+    # Reset globals
     g_all_accounts = {}
     g_owned_currencies = {}
     g_all_owned_transactions = {}
 
-    # Main Script
+    # init MD5 key for cache
     g_md5_key = get_md5_key(json_config)
-    #print(g_md5_key)
+    # get Client connection key
     g_client = get_client(json_config)
-    #print(g_client)
+    # get all accounts (currencies)
     g_all_accounts = get_all_accounts(g_client)
-    #print(g_all_accounts)
+    # filter to got only owned currencies
     g_owned_currencies = get_owned_currencies(g_all_accounts)
-    #print(g_owned_currencies)
+    # retrieve transactions of all owned currencies
     g_all_owned_transactions = get_all_owned_transactions(g_client, g_owned_currencies)
-    #print(g_all_owned_transactions)
+    # order all transactions by created date
     g_all_ordered_transactions = sort_transactions_by_date(g_all_owned_transactions)
-    #print(g_all_ordered_transactions)
+    # distribute each transaction to their currency
     g_all_distributed_transactions = distribute_transactions_at_currency(g_owned_currencies, g_all_ordered_transactions)
-    #print(g_all_distributed_transactions)
+    # calcul the sum of every transaction of each currency to got total invest
     g_sum_transaction = sum_transactions_by_currency(g_owned_currencies, g_all_distributed_transactions)
-    #print(g_sum_transaction) 
+    # got the gain by the difference of the current amount and the total invest of each currency
     g_diff_transaction = diff_currencies_transactions(g_owned_currencies, g_sum_transaction)
-    # print(g_diff_transaction) 
 
+    # clear screen
     system('cls')
+    # add header
     line = "Currency".rjust(14) + " |"
     line += "Amount".rjust(14) + " |"
-    line += "Transactions".rjust(14) + " |"
+    line += "Invest".rjust(14) + " |"
     line += "Gain".rjust(14) + " |"
     print(line)
-
     line = "".rjust(64,"-")
     print(line)
-
+    # add one line by currency and build total
     total = { 'amount' : 0, 'transactions' : 0, 'gain' : 0 }
     for currency in g_owned_currencies:
-
+        # Name
         line = currency.rjust(14) + " |"
+        # Amount
         line += str(math.floor(g_owned_currencies[currency]*100)/100).rjust(12) + " € |"
         total['amount'] += g_owned_currencies[currency]
-
+        # Invest
         line += str(math.floor(g_sum_transaction[currency]*100)/100).rjust(12) + " € |"
         total['transactions'] += g_sum_transaction[currency]
-
+        # Gain
         line += str(math.floor(g_diff_transaction[currency]*100)/100).rjust(12) + " € |"
         total['gain'] += g_diff_transaction[currency]
-
+        # add line
         print(line)
-
+    # add footer with total
     line = "".rjust(64,"-")
     print(line)
-
     line = "Total ".rjust(14) + " |"
     line += str(math.floor(total['amount']*100)/100).rjust(12) + " € |"
     line += str(math.floor(total['transactions']*100)/100).rjust(12) + " € |"
     line += str(math.floor(total['gain']*100)/100).rjust(12) + " € |"
     print(line)
-
+    # wait 60 sec and loop again
     time.sleep(60)

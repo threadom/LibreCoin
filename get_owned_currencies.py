@@ -104,4 +104,4 @@ with open('config.json') as datas_config:
 g_client = get_client(json_config)
 g_all_accounts = get_all_accounts(g_client)
 g_owned_currencies = get_owned_currencies(g_all_accounts)
-print(currencies)
+print(g_owned_currencies)

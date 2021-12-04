@@ -372,8 +372,18 @@ while looping is True:
     # got the gain by the difference of the current amount and the total invest of each currency
     g_diff_transaction = diff_currencies_transactions(g_owned_currencies, g_sum_transaction)
 
-    # clear screen
+    g_day = {}
+    for currency in g_owned_currencies:
+        g_day[currency] = {}
+        g_day[currency]['-364'] = lc.history(currency,'EUR', -364, 86400)['close']
+        g_day[currency]['-182'] = lc.history(currency,'EUR', -182, 86400)['close']
+        g_day[currency]['-91'] = lc.history(currency,'EUR', -91, 21600)['close']
+        g_day[currency]['-28'] = lc.history(currency,'EUR', -28, 3600)['close']
+        g_day[currency]['-7'] = lc.history(currency,'EUR', -7, 900)['close']
+        g_day[currency]['-1'] = lc.history(currency,'EUR', -1, 300)['close']
+        g_day[currency]['-0'] = lc.history(currency,'EUR', -0, 60)['close']
 
+    # clear screen
     os.system('cls' if os.name=='nt' else 'clear')
     # add header
     line = "Currency".rjust(14) + " |"
@@ -406,13 +416,13 @@ while looping is True:
         line += lc.format(g_diff_transaction[currency]).auto(12) + " € |"
         total['gain'] += g_diff_transaction[currency]
 
-        line += lc.format(lc.history(currency,'EUR', -364, 86400)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -182, 86400)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -91, 21600)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -28, 3600)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -7, 900)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -1, 300)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -0, 60)['close']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-364']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-182']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-91']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-28']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-7']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-1']).auto(10) + " € |"
+        line += lc.format(g_day[currency]['-0']).auto(10) + " € |"
 
         # add line
         print(line)
@@ -424,5 +434,5 @@ while looping is True:
     line += lc.format(total['transactions']).auto(12) + " € |"
     line += lc.format(total['gain']).auto(12) + " € |"
     print(line)
-    # wait 5 sec and loop again
+    # wait 60 sec and loop again
     time.sleep(60)

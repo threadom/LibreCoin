@@ -41,11 +41,18 @@ class lc_store:
         
         return cursor.fetchall()
 
-    m__createtable = {}
+    m_tableexist = {}
+    @staticmethod
+    def __tableexist(table: str):
+        # print("lc_store.__tableexist")
+        if table in lc_store.m_tableexist:
+            return True
+        return False
+
     @staticmethod
     def __createtable(table: str, datas_structure: str):
         # print("lc_store.__createtable")
-        if table in lc_store.m__createtable:
+        if lc_store.__tableexist(table):
             return True
         conn = lc_store.__connect()
         if not conn: return False
@@ -65,7 +72,7 @@ class lc_store:
 
             lc_store.__execute(query)
 
-        lc_store.m__createtable[table] = True
+        lc_store.m_tableexist[table] = True
         return True
 
     @staticmethod
@@ -94,7 +101,7 @@ class lc_store:
         conn = lc_store.__connect()
         if not conn: return False
 
-        if lc_store.__createtable(table, datas_structure):
+        if lc_store.__tableexist(table):
             query = "SELECT * FROM " + table
             query += " WHERE key = '" + key + "'"
             query += " AND " + filter_name + " >= " + str(filter_min)

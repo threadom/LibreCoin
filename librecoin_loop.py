@@ -13,12 +13,15 @@ from os import path
 from os import makedirs
 # import for specific round numbers
 import math
-from os import system
+import os
 
 # use official coinbase api
 ### https://pypi.org/project/coinbase/
 ### https://github.com/coinbase/coinbase-python/
 from coinbase.wallet.client import Client
+
+from librecoin.librecoin import librecoin
+
 
 
 ########################################################
@@ -339,7 +342,10 @@ def read_from_cache(file_name):
 # Loading configuration
 with open('config.json') as datas_config:
    json_config = json.load(datas_config)
-   
+
+lc = librecoin()
+# lc.connect(json_config)
+
 looping = True
 while looping is True:
     # Reset globals
@@ -367,14 +373,18 @@ while looping is True:
     g_diff_transaction = diff_currencies_transactions(g_owned_currencies, g_sum_transaction)
 
     # clear screen
-    system('cls')
+
+    os.system('cls' if os.name=='nt' else 'clear')
     # add header
     line = "Currency".rjust(14) + " |"
     line += "Amount".rjust(14) + " |"
     line += "Invest".rjust(14) + " |"
     line += "Gain".rjust(14) + " |"
+    for day in range(-9, 1, 1):
+        line += ("Day " + str(day)).rjust(12) + " |"
+
     print(line)
-    line = "".rjust(64,"-")
+    line = "".rjust(204,"-")
     print(line)
     # add one line by currency and build total
     total = { 'amount' : 0, 'transactions' : 0, 'gain' : 0 }
@@ -382,23 +392,35 @@ while looping is True:
         # Name
         line = currency.rjust(14) + " |"
         # Amount
-        line += str(math.floor(g_owned_currencies[currency]*100)/100).rjust(12) + " € |"
+        line += lc.format(g_owned_currencies[currency]).auto(12) + " € |"
         total['amount'] += g_owned_currencies[currency]
         # Invest
-        line += str(math.floor(g_sum_transaction[currency]*100)/100).rjust(12) + " € |"
+        line += lc.format(g_sum_transaction[currency]).auto(12) + " € |"
         total['transactions'] += g_sum_transaction[currency]
         # Gain
-        line += str(math.floor(g_diff_transaction[currency]*100)/100).rjust(12) + " € |"
+        line += lc.format(g_diff_transaction[currency]).auto(12) + " € |"
         total['gain'] += g_diff_transaction[currency]
+
+        line += lc.format(lc.history(currency,'EUR', -9)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -8)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -7)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -6)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -5)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -4)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -3)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -2)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -1)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -0)['close']).auto(10) + " € |"
+
         # add line
         print(line)
     # add footer with total
-    line = "".rjust(64,"-")
+    line = "".rjust(204,"-")
     print(line)
     line = "Total ".rjust(14) + " |"
-    line += str(math.floor(total['amount']*100)/100).rjust(12) + " € |"
-    line += str(math.floor(total['transactions']*100)/100).rjust(12) + " € |"
-    line += str(math.floor(total['gain']*100)/100).rjust(12) + " € |"
+    line += lc.format(total['amount']).auto(12) + " € |"
+    line += lc.format(total['transactions']).auto(12) + " € |"
+    line += lc.format(total['gain']).auto(12) + " € |"
     print(line)
     # wait 60 sec and loop again
     time.sleep(60)

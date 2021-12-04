@@ -2,6 +2,7 @@ import json
 
 from librecoin.lc_connect import lc_connect
 from librecoin.lc_history import *
+from librecoin.lc_format import *
 
 from coinbase.wallet.client import Client
 
@@ -23,3 +24,6 @@ class librecoin:
 
     def current(self, currency_from: str, currency_to: str):
         return lc_current(currency_from, currency_to)
+
+    def format(self, number: float):
+        return lc_format(number)

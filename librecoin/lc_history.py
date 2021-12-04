@@ -24,7 +24,10 @@ def lc_history(p_currency_from: str, p_currency_to: str, add_day: int, granulari
         headers = {"Accept": "application/json"}
         response = requests.request("GET", url, headers=headers)
         datas = json.loads(response.text)  
-        datas_structure = { 'time' : 'integer', 'low' : 'real' , 'high' : 'real', 'open' : 'real', 'close' : 'real', 'volume': 'real' }
+        datas_structure = {'time':'integer','low':'real','high':'real','open':'real','close':'real','volume':'real'}
+        if 'message' in datas:
+            if datas['message'] == 'NotFound':
+                return {'time':0,'low':0,'high':0,'open':0,'close':0,'volume':0}
         lc_store.store('lc_history', currency_pair, datas_structure, datas[0])
 
     id_data = datas[0][0];

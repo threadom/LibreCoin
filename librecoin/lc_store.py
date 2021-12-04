@@ -94,11 +94,12 @@ class lc_store:
         conn = lc_store.__connect()
         if not conn: return False
 
-        query = "SELECT * FROM " + table
-        query += " WHERE key = '" + key + "'"
-        query += " AND " + filter_name + " >= " + str(filter_min)
-        query += " AND " + filter_name + " <= " + str(filter_max)
-        query += " ORDER BY " + filter_name + " DESC"
-        rows = lc_store.__query(query)
-        
-        return rows
+        if lc_store.__createtable(table, datas_structure):
+            query = "SELECT * FROM " + table
+            query += " WHERE key = '" + key + "'"
+            query += " AND " + filter_name + " >= " + str(filter_min)
+            query += " AND " + filter_name + " <= " + str(filter_max)
+            query += " ORDER BY " + filter_name + " DESC"
+            return lc_store.__query(query)
+
+        return False

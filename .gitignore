@@ -1,4 +1,5 @@
 config.json
+librecoin.db
 *.ignore
 *.ignore.*
 *.cache

@@ -20,15 +20,19 @@ def lc_history(p_currency_from: str, p_currency_to: str, add_day: int, granulari
     datas = lc_store.read('lc_history', currency_pair, 'time', start_time, end_time)
 
     if not datas:
-        url = "https://api.exchange.coinbase.com/products/"+currency_pair+"/candles?granularity=" + str(granularity) + "&start=" + start_date + "&end=" + end_date
-        headers = {"Accept": "application/json"}
-        response = requests.request("GET", url, headers=headers)
-        datas = json.loads(response.text)  
-        datas_structure = {'time':'integer','low':'real','high':'real','open':'real','close':'real','volume':'real'}
-        if 'message' in datas:
-            if datas['message'] == 'NotFound':
-                return {'time':0,'low':0,'high':0,'open':0,'close':0,'volume':0}
-        lc_store.store('lc_history', currency_pair, datas_structure, datas[0])
+        if add_day < 30:
+            url = "https://api.exchange.coinbase.com/products/"+currency_pair+"/candles?granularity=" + str(granularity) + "&start=" + start_date + "&end=" + end_date
+            headers = {"Accept": "application/json"}
+            response = requests.request("GET", url, headers=headers)
+            datas = json.loads(response.text)  
+            datas_structure = {'time':'integer','low':'real','high':'real','open':'real','close':'real','volume':'real'}
+            if 'message' in datas:
+                if datas['message'] == 'NotFound':
+                    return {'time':0,'low':0,'high':0,'open':0,'close':0,'volume':0}
+        if datas:
+            lc_store.store('lc_history', currency_pair, datas_structure, datas[0])
+        else:
+            return {'time':0,'low':0,'high':0,'open':0,'close':0,'volume':0}
 
     id_data = datas[0][0];
     datas = {

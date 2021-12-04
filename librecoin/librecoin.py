@@ -1,6 +1,6 @@
 import json
 
-from librecoin.lc_connect import lc_connect
+from librecoin.lc_connect import *
 from librecoin.lc_history import *
 from librecoin.lc_format import *
 
@@ -16,8 +16,8 @@ class librecoin:
         self.m_client = lc_connect(json_config)
         return self.m_client
 
-    def history(self, currency_from: str, currency_to: str, add_day: int):
-        return lc_history(currency_from, currency_to, add_day)
+    def history(self, currency_from: str, currency_to: str, add_day: int, granularity: int = 300):
+        return lc_history(currency_from, currency_to, add_day, granularity)
 
     def yesterday(self, currency_from: str, currency_to: str):
         return lc_yesterday(currency_from, currency_to)

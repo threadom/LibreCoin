@@ -349,9 +349,9 @@ lc = librecoin()
 looping = True
 while looping is True:
     # Reset globals
-    g_all_accounts = {}
-    g_owned_currencies = {}
-    g_all_owned_transactions = {}
+    # g_all_accounts = {}
+    # g_owned_currencies = {}
+    # g_all_owned_transactions = {}
 
     # init MD5 key for cache
     g_md5_key = get_md5_key(json_config)
@@ -380,8 +380,13 @@ while looping is True:
     line += "Amount".rjust(14) + " |"
     line += "Invest".rjust(14) + " |"
     line += "Gain".rjust(14) + " |"
-    for day in range(-9, 1, 1):
-        line += ("Day " + str(day)).rjust(12) + " |"
+    line += ("Day -364").rjust(12) + " |"
+    line += ("Day -182").rjust(12) + " |"
+    line += ("Day -91").rjust(12) + " |"
+    line += ("Day -28").rjust(12) + " |"
+    line += ("Day -7").rjust(12) + " |"
+    line += ("Day -1").rjust(12) + " |"
+    line += ("Day -0").rjust(12) + " |"
 
     print(line)
     line = "".rjust(204,"-")
@@ -401,16 +406,13 @@ while looping is True:
         line += lc.format(g_diff_transaction[currency]).auto(12) + " € |"
         total['gain'] += g_diff_transaction[currency]
 
-        line += lc.format(lc.history(currency,'EUR', -9)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -8)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -7)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -6)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -5)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -4)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -3)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -2)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -1)['close']).auto(10) + " € |"
-        line += lc.format(lc.history(currency,'EUR', -0)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -364, 86400)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -182, 86400)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -91, 21600)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -28, 3600)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -7, 900)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -1, 300)['close']).auto(10) + " € |"
+        line += lc.format(lc.history(currency,'EUR', -0, 60)['close']).auto(10) + " € |"
 
         # add line
         print(line)
@@ -422,5 +424,5 @@ while looping is True:
     line += lc.format(total['transactions']).auto(12) + " € |"
     line += lc.format(total['gain']).auto(12) + " € |"
     print(line)
-    # wait 60 sec and loop again
+    # wait 5 sec and loop again
     time.sleep(60)

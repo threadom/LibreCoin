@@ -37,3 +37,15 @@ class lc_display:
         if text:
             for i, c in enumerate(text):
                 self.m_screen_datas[x + i][y] = c
+
+    def table(self, x: int, y: int, w: int, h: int):
+        for i in range(x,x+w):
+            self.m_screen_datas[i][y] = chr(196)
+            self.m_screen_datas[i][y+h] = chr(196)
+        for i in range(y,h):
+            self.m_screen_datas[x][i] = chr(179)
+            self.m_screen_datas[x+w][i] = chr(179)
+        self.m_screen_datas[x][y] = chr(218)
+        self.m_screen_datas[x][y+h] = chr(192)
+        self.m_screen_datas[x+w][y] = chr(191)
+        self.m_screen_datas[x+w][y+h] = chr(217)

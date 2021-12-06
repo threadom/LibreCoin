@@ -25,5 +25,8 @@ class lc_display:
             for y in range(0,self.m_screen_height):    
                 line += self.m_screen_datas[x][y]
             lines += line
-        os.system('cls' if os.name=='nt' else 'clear')
+        self.zero()
         print(lines)
+
+    def zero(self):
+        print("\033[%d;%dH" % (0, 0))

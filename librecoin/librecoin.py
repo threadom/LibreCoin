@@ -6,6 +6,7 @@ from librecoin.lc_transactions import *
 from librecoin.lc_history import *
 from librecoin.lc_format import *
 from librecoin.lc_cache import *
+from librecoin.lc_display import *
 
 from coinbase.wallet.client import Client
 
@@ -16,6 +17,7 @@ class librecoin:
         self.m_cache = False
         self.m_currencies = False
         self.m_transactions = False
+        self.m_display = False
 
     def connection(self):
         if self.m_connection:
@@ -82,3 +84,10 @@ class librecoin:
         if type(number2) is str:
             return ""
         return number1 - number2
+
+    def display(self):
+        if self.m_display:
+            return self.m_display
+
+        self.m_display = lc_display(self)
+        return self.m_display

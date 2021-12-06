@@ -30,6 +30,7 @@ with open('config.json') as datas_config:
    json_config = json.load(datas_config)
 
 lc = librecoin(json_config)
+lc.display().clear()
 
 looping = True
 while looping is True:
@@ -51,10 +52,10 @@ while looping is True:
     #     tmp['values'][currency]['-0'] = lc.history(currency,'EUR', -0, 60)['close']
 
     # add header
-    lc.display().print("Currency".rjust(14), 1, 1)
-    lc.display().print("Amount".rjust(14), 16, 1)
-    lc.display().print("Invest".rjust(14), 32, 1)
-    lc.display().print("Gain".rjust(14), 48, 1)
+    lc.display().print(" Currency ", 1, 1)
+    lc.display().print("   Amount ", 12, 1)
+    lc.display().print("   Invest ", 23, 1)
+    lc.display().print("     Gain ", 34, 1)
     # line += ("Day -364").rjust(12) + " |"
     # line += ("Day -182").rjust(12) + " |"
     # line += ("Day -91").rjust(12) + " |"

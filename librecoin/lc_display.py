@@ -7,17 +7,15 @@ class lc_display:
         self.m_screen_width = librecoin.m_json_config['screen_width']
         self.m_screen_height = librecoin.m_json_config['screen_height']
         self.m_screen_datas = {}
-        for x in range(0,self.m_screen_width):
-            self.m_screen_datas[x] = {}
-            for y in range(0,self.m_screen_height):    
-                self.m_screen_datas[x][y] = "#"
+        self.clear()
 
     def clear(self):
         for x in range(0,self.m_screen_width):
             self.m_screen_datas[x] = {}
             for y in range(0,self.m_screen_height):    
-                self.m_screen_datas[x][y] = "#"
-
+                self.m_screen_datas[x][y] = ""
+        os.system('cls' if os.name == 'nt' else 'clear')
+        
     def draw(self):
         lines = ""
         for y in range(0,self.m_screen_height):    

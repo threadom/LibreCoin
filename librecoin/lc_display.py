@@ -24,7 +24,7 @@ class lc_display:
                 line += self.m_screen_datas[x][y]
             lines += line
         self.zero()
-        print(lines)
+        print(lines, end = '')
 
     def zero(self):
         print("\033[%d;%dH" % (0, 0))

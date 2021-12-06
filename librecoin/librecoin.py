@@ -1,4 +1,5 @@
 import json
+import sys
 
 from librecoin.lc_connection import *
 from librecoin.lc_currencies import *
@@ -91,3 +92,9 @@ class librecoin:
 
         self.m_display = lc_display(self)
         return self.m_display
+
+    def config(self, property_name):
+        if property_name in self.m_json_config:
+            return self.m_json_config[property_name]
+        print("Missing property '" + property_name + "' in config.json")
+        sys.exit()

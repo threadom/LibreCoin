@@ -35,4 +35,4 @@ looping = True
 while looping is True:
     # draw screen
     lc.display().draw()
-    time.sleep(1)
+    time.sleep(lc.config("script_sleep"))

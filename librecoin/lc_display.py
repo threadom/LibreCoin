@@ -39,13 +39,15 @@ class lc_display:
                 self.m_screen_datas[x + i][y] = c
 
     def table(self, x: int, y: int, w: int, h: int):
+        w = w - 1
+        h = h - 1
         for i in range(x,x+w):
-            self.m_screen_datas[i][y] = chr(196)
-            self.m_screen_datas[i][y+h] = chr(196)
+            self.m_screen_datas[i][y] = chr(int("2500",16))
+            self.m_screen_datas[i][y+h] = chr(int("2500",16))
         for i in range(y,h):
-            self.m_screen_datas[x][i] = chr(179)
-            self.m_screen_datas[x+w][i] = chr(179)
-        self.m_screen_datas[x][y] = chr(218)
-        self.m_screen_datas[x][y+h] = chr(192)
-        self.m_screen_datas[x+w][y] = chr(191)
-        self.m_screen_datas[x+w][y+h] = chr(217)
+            self.m_screen_datas[x][i] = chr(int("2502",16))
+            self.m_screen_datas[x+w][i] = chr(int("2502",16))
+        self.m_screen_datas[x][y] = chr(int("250C",16))
+        self.m_screen_datas[x+w][y] = chr(int("2510",16))
+        self.m_screen_datas[x][y+h] = chr(int("2514",16))
+        self.m_screen_datas[x+w][y+h] = chr(int("2518",16))

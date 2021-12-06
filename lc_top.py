@@ -52,7 +52,7 @@ while looping is True:
     #     tmp['values'][currency]['-0'] = lc.history(currency,'EUR', -0, 60)['close']
 
     # add header
-    lc.display().table(0,0,239,3)
+    lc.display().table(0,0,240,3)
     lc.display().print(" Currency ", 1, 1)
     lc.display().print("   Amount ", 12, 1)
     lc.display().print("   Invest ", 23, 1)

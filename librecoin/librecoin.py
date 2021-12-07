@@ -8,6 +8,7 @@ from librecoin.lc_history import *
 from librecoin.lc_format import *
 from librecoin.lc_cache import *
 from librecoin.lc_display import *
+from librecoin.lc_keyboard import *
 
 from coinbase.wallet.client import Client
 
@@ -19,6 +20,7 @@ class librecoin:
         self.m_currencies = False
         self.m_transactions = False
         self.m_display = False
+        self.m_keyboard = False
 
     def connection(self):
         if self.m_connection:
@@ -98,3 +100,10 @@ class librecoin:
             return self.m_json_config[property_name]
         print("Missing property '" + property_name + "' in config.json")
         sys.exit()
+
+    def keyboard(self):
+        if self.m_keyboard:
+            return self.m_keyboard
+
+        self.m_keyboard = lc_keyboard(self)
+        return self.m_keyboard

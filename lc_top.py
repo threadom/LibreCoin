@@ -31,6 +31,7 @@ with open('config.json') as datas_config:
 
 lc = librecoin(json_config)
 lc.display().clear()
+lc.keyboard().listen()
 
 looping = True
 while looping is True:

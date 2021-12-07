@@ -1,5 +1,3 @@
-# import JSON
-import json
 # import for sort (and filters)
 import re 
 import operator
@@ -25,16 +23,8 @@ from librecoin.librecoin import librecoin
 #~~~~~~~~~~~~~~~~ MAIN SCRIPT ~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-# Loading configuration
-with open('config.json') as datas_config:
-   json_config = json.load(datas_config)
-
-lc = librecoin(json_config)
-lc.display().clear()
-lc.keyboard().listen()
-
-looping = True
-while looping is True:
+lc = librecoin('config.json')
+lc.run("views.dashboard")
 
 # tmp = {}
 # tmp['owned_amount'] = lc.currencies().owned_amount()['native']
@@ -53,26 +43,7 @@ while looping is True:
 #     tmp['values'][currency]['-0'] = lc.history(currency,'EUR', -0, 60)['close']
 
     # add menu
-    lc.display().table(0,0,16,3)
-    lc.display().print(" M1:   Menu 1 ", 1, 1)
-    lc.display().table(15,0,16,3)
-    lc.display().print(" M2:   Menu 2 ", 16, 1)
-    lc.display().table(30,0,16,3)
-    lc.display().print(" M3:   Menu 3 ", 31, 1)
-    lc.display().table(45,0,16,3)
-    lc.display().print(" M4:   Menu 4 ", 46, 1)
-    lc.display().table(60,0,16,3)
-    lc.display().print(" M5:   Menu 5 ", 61, 1)
-    lc.display().table(75,0,16,3)
-    lc.display().print(" M6:   Menu 6 ", 76, 1)
-    lc.display().table(90,0,16,3)
-    lc.display().print(" M7:   Menu 7 ", 91, 1)
-    lc.display().table(105,0,16,3)
-    lc.display().print(" M8:   Menu 8 ", 106, 1)
-    lc.display().table(120,0,16,3)
-    lc.display().print(" M9:   Menu 9 ", 121, 1)
-    lc.display().table(224,0,16,3)
-    lc.display().print(" MQ:     Quit ", 225, 1)
+
 
     # lc.display().table(20,0,220,3)
     # lc.display().print(" Currency ", 12, 1)
@@ -135,5 +106,3 @@ while looping is True:
     # print(line)
 
     # draw screen
-    lc.display().draw()
-    time.sleep(lc.config("script_sleep"))

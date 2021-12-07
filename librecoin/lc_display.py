@@ -4,9 +4,10 @@ class lc_display:
     def __init__(self, librecoin: object):
         self.m_librecoin = librecoin
 
-        self.m_screen_width = librecoin.m_json_config['screen_width']
-        self.m_screen_height = librecoin.m_json_config['screen_height']
+        self.m_screen_width = librecoin.config().get('screen_width')
+        self.m_screen_height = librecoin.config().get('screen_height')
         self.m_screen_datas = {}
+        self.m_current_view = False
         self.clear()
 
     def clear(self):
@@ -30,6 +31,10 @@ class lc_display:
         print("\033[%d;%dH" % (0, 0))
 
     def print(self, text: str, x: int, y: int):
+        if x < 0:
+            x = self.m_screen_width + x
+        if y < 0:
+            y = self.m_screen_height + y
         if x < 0 or x > self.m_screen_width:
             return False
         if y < 0 or y > self.m_screen_height:
@@ -39,15 +44,42 @@ class lc_display:
                 self.m_screen_datas[x + i][y] = c
 
     def table(self, x: int, y: int, w: int, h: int):
+        if x < 0:
+            x = self.m_screen_width + x
+        if y < 0:
+            y = self.m_screen_height + y
         w = w - 1
         h = h - 1
-        for i in range(x,x+w):
+        for i in range(x+1,x+w):
             self.m_screen_datas[i][y] = chr(int("2500",16))
             self.m_screen_datas[i][y+h] = chr(int("2500",16))
-        for i in range(y,h):
+        for i in range(y+1,y+h):
             self.m_screen_datas[x][i] = chr(int("2502",16))
             self.m_screen_datas[x+w][i] = chr(int("2502",16))
-        self.m_screen_datas[x][y] = chr(int("250C",16))
-        self.m_screen_datas[x+w][y] = chr(int("2510",16))
-        self.m_screen_datas[x][y+h] = chr(int("2514",16))
-        self.m_screen_datas[x+w][y+h] = chr(int("2518",16))
+
+        # TOP LEFT CORNER
+        if self.m_screen_datas[x][y] == chr(int("2514",16)):
+            self.m_screen_datas[x][y] = chr(int("251C",16))
+        elif self.m_screen_datas[x][y] == chr(int("2510",16)):
+            self.m_screen_datas[x][y] = chr(int("252C",16))
+        else:
+            self.m_screen_datas[x][y] = chr(int("250C",16))
+
+        # TOP RIGHT CORNER  
+        if self.m_screen_datas[x+w][y] == chr(int("2534",16)):
+            self.m_screen_datas[x+w][y] = chr(int("253C",16))
+        elif self.m_screen_datas[x+w][y] == chr(int("250C",16)):
+            self.m_screen_datas[x+w][y] = chr(int("252C",16))    
+        else:
+            self.m_screen_datas[x+w][y] = chr(int("2510",16))
+
+            
+        if self.m_screen_datas[x][y+h] == chr(int("2518",16)):
+            self.m_screen_datas[x][y+h] = chr(int("2534",16))    
+        else:
+            self.m_screen_datas[x][y+h] = chr(int("2514",16))
+
+        if self.m_screen_datas[x+w][y+h] == chr(int("2514",16)):
+            self.m_screen_datas[x+w][y+h] = chr(int("2534",16))    
+        else:
+            self.m_screen_datas[x+w][y+h] = chr(int("2518",16))

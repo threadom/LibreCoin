@@ -1,5 +1,6 @@
 import json
 import sys
+import time
 
 from librecoin.lc_connection import *
 from librecoin.lc_currencies import *
@@ -9,18 +10,32 @@ from librecoin.lc_format import *
 from librecoin.lc_cache import *
 from librecoin.lc_display import *
 from librecoin.lc_keyboard import *
+from librecoin.lc_config import *
+from librecoin.lc_view import *
 
 from coinbase.wallet.client import Client
 
 class librecoin:
     def __init__(self, json_config: json):
-        self.m_json_config = json_config
+        self.m_config = False
         self.m_connection = False
         self.m_cache = False
         self.m_currencies = False
         self.m_transactions = False
         self.m_display = False
         self.m_keyboard = False
+        self.m_run = False
+        self.m_view = False
+
+        self.m_config_path = json_config        
+        self.config()
+
+    def config(self):
+        if self.m_config:
+            return self.m_config
+
+        self.m_config = lc_config(self.m_config_path)
+        return self.m_config
 
     def connection(self):
         if self.m_connection:
@@ -95,15 +110,35 @@ class librecoin:
         self.m_display = lc_display(self)
         return self.m_display
 
-    def config(self, property_name):
-        if property_name in self.m_json_config:
-            return self.m_json_config[property_name]
-        print("Missing property '" + property_name + "' in config.json")
-        sys.exit()
-
     def keyboard(self):
         if self.m_keyboard:
             return self.m_keyboard
 
         self.m_keyboard = lc_keyboard(self)
         return self.m_keyboard
+
+    def run(self, view_name: str=False):
+        if self.m_run:
+            return self.m_run
+        if not view_name:
+            return False
+
+        self.display().clear()
+        self.keyboard().listen()
+        self.view().set(view_name)        
+
+        self.m_run = True
+        while self.run() is True:
+            self.view().display()
+            self.display().draw()
+            time.sleep(self.config().get("script_sleep"))
+
+    def view(self):
+        if self.m_view:
+            return self.m_view
+
+        self.m_view = lc_view(self)
+        return self.m_view
+
+    def quit(self):
+        self.m_run = False

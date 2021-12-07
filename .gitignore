@@ -6,3 +6,5 @@ librecoin.db
 *.cache.*
 cache/*
 !*Readme.md*
+*__pycache__*
+*.pyc

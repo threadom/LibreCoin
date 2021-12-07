@@ -11,9 +11,20 @@ class lc_keyboard:
             
     def handle(self, key):
         self.m_keys = self.m_keys[1] + key.name
-        print("\b", end='')
+        self.flush()
 
     def press(self, keys: str, callback: str):
         lc = self.m_librecoin
         if self.m_keys.lower() == keys.lower():
+            self.m_keys = "  "
             eval(callback)
+
+    def flush(self):
+        print("\b", end='')
+        try:
+            import msvcrt
+            while msvcrt.kbhit():
+                msvcrt.getch()
+        except ImportError:
+            import sys, termios
+            termios.tcflush(sys.stdin, termios.TCIOFLUSH)

@@ -1,4 +1,4 @@
-from pynput import keyboard
+import keyboard
 
 class lc_keyboard:
     def __init__(self, librecoin: object):
@@ -6,11 +6,7 @@ class lc_keyboard:
         self.m_listener = False
 
     def listen(self):
-        self.m_listener = keyboard.Listener(on_press=self.handle)
-        self.m_listener.start()
+        keyboard.on_press(self.handle)
             
     def handle(self, key):
         print("\b", end='')
-
-    def stop(self):
-        self.m_listener.stop()

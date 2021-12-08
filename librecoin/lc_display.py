@@ -8,6 +8,7 @@ class lc_display:
         self.m_screen_height = librecoin.config().get('screen_height')
         self.m_screen_datas = {}
         self.m_current_view = False
+        self.m_hourglass = False
         self.clear()
 
     def empty(self):
@@ -161,11 +162,13 @@ class lc_display:
         if y < 0:
             y = (self.m_screen_height + y)
 
-        if self.m_screen_datas[x][y] == chr(int("2557",16)):
-            self.m_screen_datas[x][y] = chr(int("255D",16))
-        elif self.m_screen_datas[x][y] == chr(int("2554",16)):
-            self.m_screen_datas[x][y] = chr(int("2557",16))
-        elif self.m_screen_datas[x][y] == chr(int("255A",16)):
-            self.m_screen_datas[x][y] = chr(int("2554",16))
+        if self.m_hourglass == chr(int("2557",16)):
+            self.m_hourglass = chr(int("255D",16))
+        elif self.m_hourglass == chr(int("2554",16)):
+            self.m_hourglass = chr(int("2557",16))
+        elif self.m_hourglass == chr(int("255A",16)):
+            self.m_hourglass = chr(int("2554",16))
         else:
-            self.m_screen_datas[x][y] = chr(int("255A",16))
+            self.m_hourglass = chr(int("255A",16))
+        
+        self.m_screen_datas[x][y] = self.m_hourglass

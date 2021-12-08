@@ -32,7 +32,7 @@ class lc_display:
         print(lines, end = '')
 
     def zero(self):
-        print("\033[%d;%dH" % (0, 0))
+        print("\033[%d;%dH" % (0, 0), end = '')
 
     def print(self, text: str, x: int, y: int):
         if x < 0:

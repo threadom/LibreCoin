@@ -1,4 +1,7 @@
 {
     "coinbase_api_key": "",
-    "coinbase_api_secret": ""
+    "coinbase_api_secret": "",
+    "screen_width": 230,
+    "screen_height": 55,
+    "script_sleep": 1
 }

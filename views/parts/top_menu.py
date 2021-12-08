@@ -1,16 +1,6 @@
 import librecoin
 
-def main(lc:librecoin):
-    lc.keyboard().press("DB", "lc.view().set('views.dashboard')")
-    lc.keyboard().press("WL", "lc.view().set('views.wallet')")
-    lc.keyboard().press("TS", "lc.view().set('views.transactions')")
-    lc.keyboard().press("CH", "lc.view().set('views.crypto_histo')")
-    lc.keyboard().press("TR", "lc.view().set('views.trade_rules')")
-    lc.keyboard().press("BR", "lc.view().set('views.buy_rules')")
-    lc.keyboard().press("SR", "lc.view().set('views.sell_rules')")
-    lc.keyboard().press("CF", "lc.view().set('views.config')")
-    lc.keyboard().press("QQ", "lc.view().set('views.quit')")
-
+def init(lc:librecoin):
     lc.display().table(0,0,3,3)
     lc.display().hourglass(1,1)
     lc.display().table(2,0,19,3)
@@ -31,3 +21,17 @@ def main(lc:librecoin):
     lc.display().print(" CF: Config ", -24, 1)
     lc.display().table(-12,0,12,3)
     lc.display().print(" QQ: Quit ", -11, 1)
+
+def update(lc:librecoin):
+    lc.display().hourglass(1,1)
+
+def control(lc:librecoin):
+    lc.keyboard().press("DB", "lc.view().set('views.dashboard')")
+    lc.keyboard().press("WL", "lc.view().set('views.wallet')")
+    lc.keyboard().press("TS", "lc.view().set('views.transactions')")
+    lc.keyboard().press("CH", "lc.view().set('views.crypto_histo')")
+    lc.keyboard().press("TR", "lc.view().set('views.trade_rules')")
+    lc.keyboard().press("BR", "lc.view().set('views.buy_rules')")
+    lc.keyboard().press("SR", "lc.view().set('views.sell_rules')")
+    lc.keyboard().press("CF", "lc.view().set('views.config')")
+    lc.keyboard().press("QQ", "lc.view().set('views.quit')")

@@ -54,6 +54,8 @@ class lc_display:
             y = self.m_screen_height + y
         if w == 0:
             w = self.m_screen_width - x
+        if w < 0:
+            w = self.m_screen_width - x + w
         w = w - 1
         if x < 0 or x > self.m_screen_width:
             return False
@@ -61,6 +63,7 @@ class lc_display:
             return False
         if text:
             text = text.ljust(w)
+            # text = text.ljust(w,'.')
             for i, c in enumerate(text):
                 self.m_screen_datas[x + i][y] = c
 
@@ -73,6 +76,10 @@ class lc_display:
             w = self.m_screen_width - x
         if h == 0:
             h = self.m_screen_height - y
+        if w < 0:
+            w = self.m_screen_width - x + w
+        if h < 0:
+            h = self.m_screen_height - x + h
         w = w - 1
         h = h - 1
 

@@ -26,7 +26,7 @@ class lc_display:
             line = ""
             for x in range(0,self.m_screen_width):
                 line += self.m_screen_datas[x][y]
-            lines += line
+            lines += line + "\r\n"
         self.zero()
         print(lines, end = '')
 

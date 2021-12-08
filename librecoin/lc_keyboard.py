@@ -20,7 +20,6 @@ class lc_keyboard:
             eval(callback)
 
     def flush(self):
-        print("\b", end='')
         try:
             import msvcrt
             while msvcrt.kbhit():
@@ -28,3 +27,4 @@ class lc_keyboard:
         except ImportError:
             import sys, termios
             termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+        print("\b", end='')

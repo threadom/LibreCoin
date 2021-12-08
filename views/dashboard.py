@@ -4,6 +4,7 @@ import random
 
 def init(lc:librecoin):
     lc.display().empty()
+    lc.display().bgcolor('blue', 0, 0, 0, 0)
 
     lc.view().part("views.parts.top_menu").init()
     lc.display().table(0,2,-0,-0)
@@ -13,7 +14,6 @@ def init(lc:librecoin):
     lc.display().table(0,4,-0,15)
     lc.display().table(0,4,-29*7,3)
     lc.display().ljust("Wallet History Chart", 2, 5, -29*7-1)
-    lc.display().color('red', 2, 5, -29*7-1, 1)
     
     # lc.display().ljust("Wallet History Chart", 2, 7, -29*7-1)
     # lc.display().ljust("Wallet History Chart", 2, 8, -29*7-1)

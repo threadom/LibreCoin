@@ -6,12 +6,12 @@ class lc_keyboard:
         # self.m_listener = False
         self.m_screen = False
         self.m_terminal = False
-        self.m_keys = ""
+        self.m_keys = "  "
 
     def press(self, keys: str, callback: str):
         lc = self.m_librecoin
         if self.m_keys.lower() == keys.lower():
-            self.m_keys = ""
+            self.m_keys = "  "
             eval(callback)
 
     def flush(self):
@@ -30,9 +30,11 @@ class lc_keyboard:
                 while True:
                     keys += window.getkey()
             except:
+                if keys:
+                    return keys
                 return False
             curses.flushinp
-        return keys
+        return False
 
     def listen(self):
         if not self.m_terminal:
@@ -44,5 +46,8 @@ class lc_keyboard:
         if self.m_terminal:
             keys = self.get_keys(self.m_terminal)
             if keys:
-                self.m_keys = self.m_keys + keys
+                if len(keys) > 1:
+                    self.m_keys = keys[0:2]
+                if len(keys) > 0:
+                    self.m_keys = self.m_keys[-1] + keys[0:1]
 

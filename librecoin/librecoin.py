@@ -124,13 +124,12 @@ class librecoin:
             return False
 
         self.display().clear()
-        self.keyboard().listen()
         self.view().set(view_name)        
-
         self.m_run = True
         while self.run() is True:
             self.view().display()
             self.display().draw()
+            self.keyboard().listen()
             time.sleep(self.config().get("script_sleep"))
 
     def view(self):

@@ -79,7 +79,7 @@ lc.run("views.dashboard")
         # total['transactions'] += tmp['real_invest'][currency]
         # # Gain
         # line += lc.format(tmp['real_gain'][currency]).auto(12) + " € |"
-        # total['gain'] += tmp['real_gain'][currency]
+        # total['gain'] += tmp['real_gain'][currency]pip
         # line += lc.format(tmp['values'][currency]['-364']).auto(10) + " € |"
         # line += lc.format(tmp['values'][currency]['-182']).auto(10) + " € |"
         # line += lc.format(tmp['values'][currency]['-91']).auto(10) + " € |"

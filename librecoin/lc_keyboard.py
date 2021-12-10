@@ -38,7 +38,7 @@ class lc_keyboard:
                 while True:
                     keys += window.getkey()
             except:
-                curses.flushinp
+                # curses.flushinp
                 if keys:
                     return keys
                 return False

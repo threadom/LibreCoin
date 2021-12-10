@@ -24,12 +24,7 @@ from librecoin.librecoin import librecoin
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 lc = librecoin('config.json')
-lc.run("views.dashboard")
-
-# tmp = {}
-# tmp['owned_amount'] = lc.currencies().owned_amount()['native']
-# tmp['real_invest'] = lc.currencies().real_invest()['native']
-# tmp['real_gain'] = lc.currencies().real_gain()['native']
+lc.run("views.vDashboard")
 
 # tmp['values'] = {}
 # for currency in tmp['owned_amount']:

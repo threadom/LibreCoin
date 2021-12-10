@@ -1,5 +1,5 @@
-# import JSON
 import json
+import sys
 
 class lc_config:
     def __init__(self, config_path: str):

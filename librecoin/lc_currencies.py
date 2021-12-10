@@ -17,7 +17,7 @@ class lc_currencies:
     ########################################################
     # get all pagined currencies to only one dict
     def all(self):
-        print("currencies.all")
+        # print("currencies.all")
 
         # read from globals if exist
         if self.m_all:
@@ -65,7 +65,7 @@ class lc_currencies:
     ########################################################
     # get own currencies
     def owned_amount(self):
-        print("currencies.owned_amount")
+        # print("currencies.owned_amount")
 
         # read from globals if exist
         if self.m_owned_amount:
@@ -102,7 +102,7 @@ class lc_currencies:
     ########################################################
     #
     def real_invest(self):
-        print("currencies.real_invest")
+        # print("currencies.real_invest")
         if self.m_real_invest:
             return self.m_real_invest
 
@@ -124,7 +124,7 @@ class lc_currencies:
     ########################################################
     #
     def real_gain(self):
-        print("currencies.real_gain")
+        # print("currencies.real_gain")
         if self.m_real_gain:
             return self.m_real_gain
 

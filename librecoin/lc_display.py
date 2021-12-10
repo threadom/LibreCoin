@@ -12,6 +12,7 @@ class lc_display:
         self.m_screen_bgcolors = {}
         self.m_current_view = False
         self.m_hourglass = False
+        self.m_ascii_art = {}
         self.clear()
 
     def empty(self):
@@ -309,3 +310,24 @@ class lc_display:
         if color or bgcolor:
             return colorcode
         return False
+
+    def ascii_art(self, file_path: str, x: int, y: int):
+        if not (file_path in self.m_ascii_art):
+            self.m_ascii_art[file_path] = {}
+            l_file = open(file_path, "r")
+            line = l_file.readline()
+            j = 0
+            while line:
+                self.m_ascii_art[file_path][y + j] = {}
+                for i, c in enumerate(line):
+                    if c != chr(15) and c != chr(10):
+                        self.m_ascii_art[file_path][y + j][x + i] = c
+                line = l_file.readline()
+                j = j + 1
+        
+        if file_path in self.m_ascii_art:
+            for j in self.m_ascii_art[file_path]:
+                for i in self.m_ascii_art[file_path][j]:
+                    self.m_screen_datas[x+i][y+j] = self.m_ascii_art[file_path][j][i]
+
+

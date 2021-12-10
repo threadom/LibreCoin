@@ -4,9 +4,10 @@ import random
 
 def init(lc:librecoin):
     lc.display().empty()
-    lc.display().bgcolor('blue', 0, 0, 0, 0)
+    lc.display().bgcolor('purple', 0, 0, 0, 3)
+    lc.display().bgcolor('green', 0, 3, 0, 0)
 
-    lc.view().part("views.parts.top_menu").init()
+    lc.view().part("parts.pTopMenu").init()
     lc.display().table(0,2,-0,-0)
     lc.display().table(0,2,-0,3)
     lc.display().ljust("Dashboard", 2, 3, -1)
@@ -73,10 +74,13 @@ def init(lc:librecoin):
     lc.display().ljust("WE:Wallet Evolution", 2, 19, -29*7-1)
     lc.display().ljust("Minute Compare", 2, 21, -29*7-1)
 
-def update(lc:librecoin):
-    lc.view().part("views.parts.top_menu").update()
+    lc.thread().start('threads.tDashboard','tDashboard')
 
-    # lc.display().print(str(random.randint(0,99)), 10, 10)
+def update(lc:librecoin):
+    lc.view().part("parts.pTopMenu").update()
+
+def quit(lc:librecoin):
+    lc.thread().stop('threads.tDashboard','tDashboard')
 
 def control(lc:librecoin):
-    lc.view().part("views.parts.top_menu").control()
+    lc.view().part("parts.pTopMenu").control()

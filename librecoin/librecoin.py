@@ -12,6 +12,7 @@ from librecoin.lc_display import *
 from librecoin.lc_keyboard import *
 from librecoin.lc_config import *
 from librecoin.lc_view import *
+from librecoin.lc_thread import *
 
 from coinbase.wallet.client import Client
 
@@ -26,6 +27,7 @@ class librecoin:
         self.m_keyboard = False
         self.m_run = False
         self.m_view = False
+        self.m_thread = False
 
         self.m_config_path = json_config        
         self.config()
@@ -141,3 +143,10 @@ class librecoin:
 
     def quit(self):
         self.m_run = False
+
+    def thread(self):
+        if self.m_thread:
+            return self.m_thread
+
+        self.m_thread = lc_thread(self)
+        return self.m_thread

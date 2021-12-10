@@ -1,12 +1,20 @@
-import curses
+import os 
 
 class lc_keyboard:
     def __init__(self, librecoin: object):
         self.m_librecoin = librecoin
-        # self.m_listener = False
+        self.m_listener = False
         self.m_screen = False
         self.m_terminal = False
         self.m_keys = "  "
+
+    def on_press(self, key):
+        try:
+            key = key.char
+        except:
+            return False
+
+        self.m_keys = self.m_keys[-1] + key
 
     def press(self, keys: str, callback: str):
         lc = self.m_librecoin
@@ -25,29 +33,38 @@ class lc_keyboard:
 
     def get_keys(self, window):
         if window:
+            keys = ''
             try:
-                key = ''
                 while True:
                     keys += window.getkey()
             except:
+                curses.flushinp
                 if keys:
                     return keys
                 return False
-            curses.flushinp
         return False
 
     def listen(self):
-        if not self.m_terminal:
-            if not self.m_screen:
-                self.m_screen = curses.initscr()
-            if self.m_screen:
-                self.m_terminal = self.m_screen.subwin(0, 0)
-                self.m_terminal.nodelay(True)
-        if self.m_terminal:
-            keys = self.get_keys(self.m_terminal)
-            if keys:
-                if len(keys) > 1:
-                    self.m_keys = keys[0:2]
-                if len(keys) > 0:
-                    self.m_keys = self.m_keys[-1] + keys[0:1]
+        if os.name == 'nt':
+            if not self.m_listener:
+                from pynput import keyboard
+
+                self.m_listener = keyboard.Listener(on_press=self.on_press)
+                self.m_listener.start()
+        else:
+            if not self.m_terminal:
+                import curses
+                if not self.m_screen:
+                    self.m_screen = curses.initscr()
+                if self.m_screen:
+                    self.m_terminal = self.m_screen.subwin(0, 0)
+                    self.m_terminal.nodelay(True)
+
+            if self.m_terminal:
+                keys = self.get_keys(self.m_terminal)
+                if keys:
+                    if len(keys) > 1:
+                        self.m_keys = keys[0:2]
+                    if len(keys) > 0:
+                        self.m_keys = self.m_keys[-1] + keys[0:1]
 

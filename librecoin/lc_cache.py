@@ -20,12 +20,8 @@ class lc_cache:
             return self.m_cache_key
 
         # do it if nothing else exist
-        coinbase_api_key = ""
-        coinbase_api_secret = ""
-        if "coinbase_api_key" in self.m_librecoin.m_json_config:
-            coinbase_api_key = self.m_librecoin.m_json_config['coinbase_api_key'];
-        if "coinbase_api_secret" in self.m_librecoin.m_json_config:
-            coinbase_api_secret = self.m_librecoin.m_json_config['coinbase_api_secret'];
+        coinbase_api_key = self.m_librecoin.config().get('coinbase_api_key')
+        coinbase_api_secret = self.m_librecoin.config().get('coinbase_api_secret')
 
         # init globals before return
         self.m_cache_key = hashlib.md5((coinbase_api_key + "|" + coinbase_api_secret).encode()).hexdigest();
@@ -85,9 +81,7 @@ class lc_cache:
         current_date = current_date.timestamp()
 
         # if expired return True else False
-        cache_expire_time = 300
-        if "cache_expire_time" in self.m_librecoin.m_json_config:
-            cache_expire_time = self.m_librecoin.m_json_config['cache_expire_time'];
+        cache_expire_time = self.m_librecoin.config().get('cache_expire_time');
         if current_date > (modify_date + cache_expire_time):
             return True
         return False

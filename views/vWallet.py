@@ -3,13 +3,13 @@ import librecoin
 def init(lc:librecoin):
     lc.display().empty()
 
-    lc.view().part("views.parts.top_menu").init()
+    lc.view().part("parts.pTopMenu").init()
     lc.display().table(0,2,-0,-0)
     lc.display().table(0,2,-0,3)
     lc.display().ljust(" Wallet ", 1, 3, 0)
 
 def update(lc:librecoin):
-    lc.view().part("views.parts.top_menu").update()
+    lc.view().part("parts.pTopMenu").update()
 
     tmp = {}
     tmp['owned_amount'] = lc.currencies().owned_amount()['native']
@@ -40,4 +40,4 @@ def update(lc:librecoin):
         lc.display().ljust(lc.format(tmp['owned'][currency]['-0']).auto(10) + " € |", 80, y, 10)
 
 def control(lc:librecoin):
-    lc.view().part("views.parts.top_menu").control()
+    lc.view().part("parts.pTopMenu").control()

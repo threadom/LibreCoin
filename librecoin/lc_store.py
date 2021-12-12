@@ -1,112 +1,131 @@
 import json
-import sqlite3
-from sqlite3 import Error
+
+# import sqlite3
+# from sqlite3 import Error
 
 class lc_store:
-    m_connection = False
+    def __init__(self, librecoin: object):
+        self.m_librecoin = librecoin
+        self.m_database_type = self.m_librecoin.config().get("database_type")
+        self.m_database_host = self.m_librecoin.config().get("database_host")
+        self.m_database_base = self.m_librecoin.config().get("database_base")
+        self.m_database_user = self.m_librecoin.config().get("database_user")
+        self.m_database_pass = self.m_librecoin.config().get("database_pass")
+        self.m_connection = False
+        self.m_tableexist = {}
 
-    @staticmethod
-    def __connect():
+    def __connect(self):           
         # print("lc_store.__connect")
-        if lc_store.m_connection:
-            return lc_store.m_connection
-        try:
-            db_file = "librecoin.db"
-            lc_store.m_connection = sqlite3.connect(db_file)
-            return lc_store.m_connection
-        except Error as e:
-            print(e)
+        if self.m_connection:
+            return self.m_connection
+        if self.m_database_type == "mariadb":
+            import mariadb
+            try:
+                self.m_connection = mariadb.connect(
+                    host=self.m_database_host,
+                    database=self.m_database_base,
+                    user=self.m_database_user,
+                    password=self.m_database_pass
+                )
+                return self.m_connection
+            except mariadb.Error as e: 
+                print(f"Error connecting to MariaDB Platform: {e}") 
+                sys.exit(1) 
 
-    @staticmethod
-    def __execute(query: str):
-        # print("lc_store.__execute")
-        conn = lc_store.__connect()
-        if not conn: return False
+        # /!\ Obsolete : sqlite3 don't support multi threading 
+        # /!\ try:
+        # /!\     db_file = "librecoin.db"
+        # /!\     self.m_connection = sqlite3.connect(db_file)
+        # /!\     return self.m_connection
+        # /!\ except Error as e:
+        # /!\     print(e)
 
-        cursor = conn.cursor()
-        # print(query)
-        cursor.execute(query)
-        conn.commit()
+    def __execute(self, query: str):
+        if not self.m_connection:
+            self.m_connection = self.__connect()
+        if self.m_connection:
+            cursor = self.m_connection.cursor()
+            cursor.execute(query)
+            self.m_connection.commit()
 
 
-    @staticmethod
-    def __query(query: str):
-        # print("lc_store.__query")
-        conn = lc_store.__connect()
-        if not conn: return False
+    def __query(self, query: str):
+        if not self.m_connection:
+            self.m_connection = self.__connect()
+        if self.m_connection:
+            cursor = self.m_connection.cursor()
+            cursor.execute(query)
+            
+            return cursor.fetchall()
 
-        cursor = conn.cursor()
-        # print(query)
-        cursor.execute(query)
-        
-        return cursor.fetchall()
-
-    m_tableexist = {}
-    @staticmethod
-    def __tableexist(table: str):
+    
+    def __tableexist(self, table: str):
         # print("lc_store.__tableexist")
-        if table in lc_store.m_tableexist:
+        if table in self.m_tableexist:
             return True
+        if self.m_database_type == "mariadb":
+            query = "SHOW TABLES LIKE '" + table + "'";
+            rows = self.__query(query)
+            if len(rows) > 0:
+                return True
+        # if self.m_database_type == "sqlite":
+        #     query = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + table + "'";
+        #     rows = self.__query(query)
+        #     if len(rows) > 0:
+        #         return True
+
         return False
 
-    @staticmethod
-    def __createtable(table: str, datas_structure: str):
+    def __createtable(self, table: str, datas_structure: str):
         # print("lc_store.__createtable")
-        if lc_store.__tableexist(table):
+        if self.__tableexist(table):
             return True
-        conn = lc_store.__connect()
-        if not conn: return False
-
-        # test if table exist
-        query = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + table + "'";
-        rows = lc_store.__query(query)
-
-        if not (len(rows) > 0):
+        if not self.m_connection:
+            self.m_connection = self.__connect()
+        if self.m_connection:
             query = "CREATE TABLE IF NOT EXISTS " + table + " ("
-            query += "id integer PRIMARY KEY,"
-            query += "key text,"
+            query += "id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+            query += "skey text,"
             for field in datas_structure:
                 query += field + " " + datas_structure[field] + ","
             query = query[:-1]
             query += ");"
-
-            lc_store.__execute(query)
-
-        lc_store.m_tableexist[table] = True
-        return True
-
-    @staticmethod
-    def store(table: str, key: int, datas_structure: json, datas: json):
-        # print("lc_store.store")
-        conn = lc_store.__connect()
-        if not conn: return False
-
-        if lc_store.__createtable(table, datas_structure):
-            query = "INSERT INTO " + table + " (key,"
-            for field in datas_structure:
-                query += field + ","
-            query = query[:-1]
-            query += ") VALUES ('" + key + "',"
-            for value in datas:
-                query += "'" + str(value) + "',"
-            query = query[:-1]
-            query += ");"
-            lc_store.__execute(query)
-
+            self.__execute(query)
+            self.m_tableexist[table] = True
+            return True
         return False
 
-    @staticmethod
-    def read(table: str, key: int, filter_name: str, filter_min: int, filter_max: int):
+    def store(self, table: str, skey: int, datas_structure: json, datas: json):
+        # print("lc_store.store")
+        if not self.m_connection:
+            self.m_connection = self.__connect()
+        if self.m_connection:
+            if self.__createtable(table, datas_structure):
+                query = "INSERT INTO " + table + " (skey,"
+                for field in datas_structure:
+                    query += field + ","
+                query = query[:-1]
+                query += ") VALUES ('" + skey + "',"
+                for value in datas:
+                    query += "'" + str(value) + "',"
+                query = query[:-1]
+                query += ");"
+                self.__execute(query)
+                return True
+            return False
+        return False
+
+    def read(self, table: str, skey: int, filter_name: str, filter_min: int, filter_max: int):
         # print("lc_store.read")
-        conn = lc_store.__connect()
-        if not conn: return False
-
-        if lc_store.__tableexist(table):
-            query = "SELECT * FROM " + table
-            query += " WHERE key = '" + key + "'"
-            query += " AND " + filter_name + " >= " + str(filter_min)
-            query += " AND " + filter_name + " <= " + str(filter_max)
-            query += " ORDER BY " + filter_name + " DESC"
-            return lc_store.__query(query)
-
+        if not self.m_connection:
+            self.m_connection = self.__connect()
+        if self.m_connection:
+            if self.__tableexist(table):
+                query = "SELECT * FROM " + table
+                query += " WHERE skey = '" + skey + "'"
+                query += " AND " + filter_name + " >= " + str(filter_min)
+                query += " AND " + filter_name + " <= " + str(filter_max)
+                query += " ORDER BY " + filter_name + " DESC"
+                return self.__query(query)
+            return False
         return False

@@ -23,6 +23,7 @@ from librecoin.librecoin import librecoin
 #~~~~~~~~~~~~~~~~ MAIN SCRIPT ~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+
 lc = librecoin('config.json')
 lc.run("views.vDashboard")
 

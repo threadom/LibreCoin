@@ -24,29 +24,67 @@ class tDashboard(threading.Thread):
             tmp['owned'] = {}
             for currency in tmp['owned_amount']:
                 tmp['owned'][currency] = {}
-                tmp['owned'][currency]['-364'] = lc.history(currency,'EUR', -364, 86400)['close']
-                tmp['owned'][currency]['-182'] = lc.history(currency,'EUR', -182, 86400)['close']
-                tmp['owned'][currency]['-91'] = lc.history(currency,'EUR', -91, 21600)['close']
-                tmp['owned'][currency]['-28'] = lc.history(currency,'EUR', -28, 3600)['close']
-                tmp['owned'][currency]['-7'] = lc.history(currency,'EUR', -7, 900)['close']
-                tmp['owned'][currency]['-1'] = lc.history(currency,'EUR', -1, 300)['close']
-                tmp['owned'][currency]['-0'] = lc.history(currency,'EUR', -0, 60)['close']
+                tmp['owned'][currency]['-7'] = lc.history().get(currency,'EUR', -7, 60)['close']
+                tmp['owned'][currency]['-6'] = lc.history().get(currency,'EUR', -6, 60)['close']
+                tmp['owned'][currency]['-5'] = lc.history().get(currency,'EUR', -5, 60)['close']
+                tmp['owned'][currency]['-4'] = lc.history().get(currency,'EUR', -4, 60)['close']
+                tmp['owned'][currency]['-3'] = lc.history().get(currency,'EUR', -3, 60)['close']
+                tmp['owned'][currency]['-2'] = lc.history().get(currency,'EUR', -2, 60)['close']
+                tmp['owned'][currency]['-1'] = lc.history().get(currency,'EUR', -1, 60)['close']
+                tmp['owned'][currency]['-0'] = lc.history().get(currency,'EUR', -0, 60)['close']
 
-            y = 0
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-6/-7%'] = ((tmp['owned'][currency]['-6'] / tmp['owned'][currency]['-7']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-6/-7%'] = ""
+
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-5/-6%'] = ((tmp['owned'][currency]['-5'] / tmp['owned'][currency]['-6']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-5/-6%'] = ""
+
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-4/-5%'] = ((tmp['owned'][currency]['-4'] / tmp['owned'][currency]['-5']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-4/-5%'] = ""
+
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-3/-4%'] = ((tmp['owned'][currency]['-3'] / tmp['owned'][currency]['-4']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-3/-4%'] = ""
+
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-2/-3%'] = ((tmp['owned'][currency]['-2'] / tmp['owned'][currency]['-3']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-2/-3%'] = ""
+
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-1/-2%'] = ((tmp['owned'][currency]['-1'] / tmp['owned'][currency]['-2']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-1/-2%'] = ""
+
+                if tmp['owned'][currency]['-0'] > 0:
+                    tmp['owned'][currency]['-0/-1%'] = ((tmp['owned'][currency]['-0'] / tmp['owned'][currency]['-1']) * 100) - 100
+                else:
+                    tmp['owned'][currency]['-0/-1%'] = ""
+
+            y = 23
             for currency in tmp['owned_amount']:
+                lc.display().ljust(currency, 2, y, 8)
+                lc.display().color('white', 2, y, 8, 1)
+                lc.display().bgcolor('blue', 2, y, 8, 1)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-6/-7%']).auto(8) + " %", 13, y, 10)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-5/-6%']).auto(8) + " %", 25, y, 10)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-4/-5%']).auto(8) + " %", 37, y, 10)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-3/-4%']).auto(8) + " %", 49, y, 10)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-2/-3%']).auto(8) + " %", 61, y, 10)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-1/-2%']).auto(8) + " %", 73, y, 10)
+                lc.display().ljust(lc.format(tmp['owned'][currency]['-0/-1%']).auto(8) + " %", 85, y, 10)
+                lc.display().color('white', 13, y, 10, 1)
+                lc.display().bgcolor('blue', 13, y, 10, 1)
                 y += 1
-                lc.display().ljust(currency, 1, y, 9)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-364']).auto(10) + " € |", 10, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-364']).auto(10) + " € |", 20, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-182']).auto(10) + " € |", 30, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-91']).auto(10) + " € |", 40, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-28']).auto(10) + " € |", 50, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-7']).auto(10) + " € |", 60, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-1']).auto(10) + " € |", 70, y, 10)
-                lc.display().ljust(lc.format(tmp['owned'][currency]['-0']).auto(10) + " € |", 80, y, 10)
-
             # self.m_librecoin.display().draw()
-            time.sleep(1)
+            time.sleep(10)
 
     def stop(self):
-        self.m_run = Falsea
+        self.m_run = False

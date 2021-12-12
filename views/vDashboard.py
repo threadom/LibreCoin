@@ -4,8 +4,8 @@ import random
 
 def init(lc:librecoin):
     lc.display().empty()
-    lc.display().bgcolor('purple', 0, 0, 0, 3)
-    lc.display().bgcolor('green', 0, 3, 0, 0)
+    # lc.display().bgcolor('purple', 0, 0, 0, 3)
+    # lc.display().bgcolor('green', 0, 3, 0, 0)
 
     lc.view().part("parts.pTopMenu").init()
     lc.display().table(0,2,-0,-0)
@@ -69,7 +69,7 @@ def init(lc:librecoin):
     lc.display().table(0, 18, -29*7, 0)
     lc.display().table(0, 18, -29*7, 3)
     lc.display().table(0, 20, -29*7, 3)
-    lc.display().table(-29*7 -9, 22, 7, 0)
+    lc.display().table(-29*7 -16, 22, 14, 0)
     lc.display().table(-29*7 -3, 22, 3, 0)
     lc.display().ljust("WE:Wallet Evolution", 2, 19, -29*7-1)
     lc.display().ljust("Minute Compare", 2, 21, -29*7-1)

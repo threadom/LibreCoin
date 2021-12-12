@@ -90,6 +90,7 @@ class lc_display:
         if text:
             # text = text.ljust(w)
             text = text.ljust(w+1)
+            text = text[0:w+1]
             for i, c in enumerate(text):
                 self.m_screen_datas[x + i][y] = c
 
@@ -288,8 +289,10 @@ class lc_display:
                 colorcode += '\033[96m'
             case 'white':
                 colorcode += '\033[97m'
-            case 'gray':
-                colorcode += '\033[98m'
+            case 'ligthgray':
+                colorcode += '\033[37m'
+            case 'darkgray':
+                colorcode += '\033[90m'
         match bgcolor:
             case 'black':
                 colorcode += '\033[40m'
@@ -305,8 +308,12 @@ class lc_display:
                 colorcode += '\033[45m'
             case 'cyan':
                 colorcode += '\033[46m'
-            case 'gray':
+            case 'ligthgray':
                 colorcode += '\033[47m'
+            case 'darkgray':
+                colorcode += '\033[100m'
+            case 'white':
+                colorcode += '\033[107m'
         if color or bgcolor:
             return colorcode
         return False

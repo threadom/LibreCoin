@@ -13,6 +13,8 @@ from librecoin.lc_keyboard import *
 from librecoin.lc_config import *
 from librecoin.lc_view import *
 from librecoin.lc_thread import *
+from librecoin.lc_coinbase import *
+from librecoin.lc_store import *
 
 from coinbase.wallet.client import Client
 
@@ -28,6 +30,9 @@ class librecoin:
         self.m_run = False
         self.m_view = False
         self.m_thread = False
+        self.m_coinbase = False
+        self.m_history = False
+        self.m_store = False
 
         self.m_config_path = json_config        
         self.config()
@@ -38,6 +43,13 @@ class librecoin:
 
         self.m_config = lc_config(self.m_config_path)
         return self.m_config
+    
+    def coinbase(self):
+        if self.m_coinbase:
+            return self.m_coinbase
+
+        self.m_coinbase = lc_coinbase(self)
+        return self.m_coinbase
 
     def connection(self):
         if self.m_connection:
@@ -52,6 +64,20 @@ class librecoin:
 
         self.m_cache = lc_cache(self)
         return self.m_cache
+    
+    def store(self):
+        if self.m_store:
+            return self.m_store
+
+        self.m_store = lc_store(self)
+        return self.m_store
+
+    def history(self):
+        if self.m_history:
+            return self.m_history
+
+        self.m_history = lc_history(self)
+        return self.m_history
 
     def currencies(self):
         if self.m_currencies:
@@ -66,9 +92,6 @@ class librecoin:
 
         self.m_transactions = lc_transactions(self)
         return self.m_transactions
-
-    def history(self, currency_from: str, currency_to: str, add_day: int, granularity: int = 300):
-        return lc_history(currency_from, currency_to, add_day, granularity)
 
     def yesterday(self, currency_from: str, currency_to: str):
         return lc_yesterday(currency_from, currency_to)

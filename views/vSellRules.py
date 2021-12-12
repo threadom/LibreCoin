@@ -3,13 +3,13 @@ import librecoin
 def init(lc:librecoin):
     lc.display().empty()
 
-    lc.view().part("views.parts.top_menu").init()
+    lc.view().part("parts.pTopMenu").init()
     lc.display().table(0,2,-0,-0)
     lc.display().table(0,2,-0,3)
     lc.display().ljust(" Sell Rules ", 1, 3, 0)
 
 def update(lc:librecoin):
-    lc.view().part("views.parts.top_menu").update()
+    lc.view().part("parts.pTopMenu").update()
 
 def control(lc:librecoin):
-    lc.view().part("views.parts.top_menu").control()
+    lc.view().part("parts.pTopMenu").control()

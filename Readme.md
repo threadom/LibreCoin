@@ -52,8 +52,11 @@ App will be oriented to multi threaded python application
 
 ## Developpement
 
-###### Do you want join us to the developpement ? [Look into documents/developpement/0 - join us folder for more.](https://github.com/threadom/LibreCoin/tree/main/documents/developpement/0%20-%20join%20us)
-###### You want understand how it's work ? [Look into documents/developpement/1 - starter folder for more.](https://github.com/threadom/LibreCoin/tree/main/documents/developpement/1%20-%20starter)
+###### Do you want join us to the developpement ?
+###### [Look into documents/developpement/0 - join us folder for more.](https://github.com/threadom/LibreCoin/tree/main/documents/developpement/0%20-%20join%20us)
+
+###### You want understand how it's work ?
+###### [Look into documents/developpement/1 - starter folder for more.](https://github.com/threadom/LibreCoin/tree/main/documents/developpement/1%20-%20starter)
 
 ## What's new
 

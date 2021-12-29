@@ -175,3 +175,10 @@ class librecoin:
 
         self.m_thread = lc_thread(self)
         return self.m_thread
+
+    def sleep(self, seconds):
+        time.sleep(seconds)
+
+    def print(self, message, level):
+        if level <= 8:
+            print('<' + str(level) + '> ' + message)

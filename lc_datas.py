@@ -4,8 +4,9 @@ from librecoin.librecoin import librecoin
 #~~~~~~~~~~~~~~~~ MAIN SCRIPT ~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-lc = librecoin('config.json')
+lc = librecoin('configs/config.json')
 while lc.loop() is True:
-    lc.thread()
+    lc.thread().start('threads.datas.tTransactions','tTransactions')
+    lc.sleep(1)
 
 lc.stop()

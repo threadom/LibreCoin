@@ -7,7 +7,7 @@ def init(lc:librecoin):
     # lc.display().bgcolor('purple', 0, 0, 0, 3)
     # lc.display().bgcolor('green', 0, 3, 0, 0)
 
-    lc.view().part("parts.pTopMenu").init()
+    lc.view().part("views.console.parts.pTopMenu").init()
     lc.display().table(0,2,-0,-0)
     lc.display().table(0,2,-0,3)
     lc.display().ljust("Dashboard", 2, 3, -1)
@@ -74,13 +74,14 @@ def init(lc:librecoin):
     lc.display().ljust("WE:Wallet Evolution", 2, 19, -29*7-1)
     lc.display().ljust("Minute Compare", 2, 21, -29*7-1)
 
-    lc.thread().start('threads.tDashboard','tDashboard')
+    # lc.thread().start('threads.tDashboard','tDashboard')
 
 def update(lc:librecoin):
-    lc.view().part("parts.pTopMenu").update()
+    lc.view().part("views.console.parts.pTopMenu").update()
 
 def quit(lc:librecoin):
-    lc.thread().stop('threads.tDashboard','tDashboard')
+    # lc.thread().stop('threads.tDashboard','tDashboard')
+    lc.nothing()
 
 def control(lc:librecoin):
-    lc.view().part("parts.pTopMenu").control()
+    lc.view().part("views.console.parts.pTopMenu").control()

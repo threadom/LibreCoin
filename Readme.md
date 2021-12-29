@@ -1,40 +1,61 @@
-Installation
-------------
+# LibreCOIN - Open Source Crypto Asset
 
-``coinbase`` is available on `PYPI <https://pypi.python.org/pypi/coinbase/>`_.
-Install with ``pip``:
+App will be oriented to multi threaded python application
 
-.. code:: bash
+# Table of contents
+1. [Features](#features)
+2. [Documentations](#documentations)
+3. [Screen captures](#screen-captures)
+4. [Server requirements](#server-requirements)
+5. [Client requirements](#client-requirements)
+6. [Installation](#installation)
+7. [Developpement](#developpement)
+8. [-](#-)
+9. [-](#-)
+10. [What's new ?](#what-s-new)
 
-    pip install coinbase
+## Features
+* Datas :
+    * Enable to use CoinBase API to retrieve personnal wallet
+    * Enable to use CoinBase API to retrieve 
 
-or with ``easy_install``:
+* Rules :
 
-.. code:: bash
+* Console display :
 
-    easy_install coinbase
+* Web display :
 
-The library is currently tested against Python versions 2.7 and 3.4+.
+## Documentations
 
-*Note*: this package name used to refer to the unofficial `coinbase_python`
-library maintained by `George Sibble <https://github.com/sibblegp/>`_.
-George graciously allowed us to use the name for this package instead. You can
-still find that package `on Github <https://github.com/sibblegp/coinbase_python/>`_.
-Thanks, George.
+###### [Look into documents/features folder for more.](https://github.com/threadom/LibreCOIN/tree/main/documents/features)
+###### [Look into documents/market_analysis folder for more.](https://github.com/threadom/LibreCOIN/tree/main/documents/market_analysis)
 
-Documentation
--------------
+## Screen captures
 
-The first thing you'll need to do is `sign up with Coinbase <https://coinbase.com>`_.
+###### [Look into documents/screen_captures folder for more.](https://github.com/threadom/LibreCOIN/tree/main/documents/screen_captures)
 
-API Key + Secret
-^^^^^^^^^^^^^^^^
+## Server requirements
 
-If you're writing code for your own Coinbase account, `enable an API key <https://coinbase.com/settings/api>`_.
+###### [Look into documents/requirements/server folder for more.](https://github.com/threadom/LibreCOIN/tree/main/documents/requirements/server)
 
-Next, create a ``Client`` object for interacting with the API:
+## Client requirements
+* Microsoft Edge                    >= 94.0.992
+* Opera                             >= 
+* Firefox                           >=
+* Chrome                            >=
 
-.. code:: python
+###### [Look into documents/requirements/client folder for more.](https://github.com/threadom/LibreCOIN/tree/main/documents/requirements/client)
 
-    from coinbase.wallet.client import Client
-    client = Client(api_key, api_secret)
+## Installation
+
+###### [Look into documents/installation folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/installation)
+
+## Developpement
+
+###### [Look into documents/developpement/join folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/developpement/starter)
+###### [Look into documents/developpement/starter folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/developpement/starter)
+###### [Look into documents/developpement/first_module folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/developpement/starter)
+
+## What's new
+
+###### [Look into documents/developpement/first_module folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/whatsnew)

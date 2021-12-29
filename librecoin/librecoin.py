@@ -21,13 +21,15 @@ from coinbase.wallet.client import Client
 class librecoin:
     def __init__(self, json_config: json):
         self.m_config = False
+        self.m_loop = False
+        self.m_stop = False
+
         self.m_connection = False
         self.m_cache = False
         self.m_currencies = False
         self.m_transactions = False
         self.m_display = False
         self.m_keyboard = False
-        self.m_run = False
         self.m_view = False
         self.m_thread = False
         self.m_coinbase = False
@@ -43,7 +45,21 @@ class librecoin:
 
         self.m_config = lc_config(self.m_config_path)
         return self.m_config
-    
+
+    def loop(self):
+        if self.m_loop:
+            time.sleep(self.config().get("script_sleep"))
+            return self.m_loop
+
+        if self.m_stop:
+            return False
+
+        self.m_loop = True
+        return self.m_loop
+
+    def nothing(self):
+        return False
+
     def coinbase(self):
         if self.m_coinbase:
             return self.m_coinbase
@@ -142,21 +158,6 @@ class librecoin:
         self.m_keyboard = lc_keyboard(self)
         return self.m_keyboard
 
-    def run(self, view_name: str=False):
-        if self.m_run:
-            return self.m_run
-        if not view_name:
-            return False
-
-        self.display().clear()
-        self.view().set(view_name)        
-        self.m_run = True
-        while self.run() is True:
-            self.view().display()
-            self.display().draw()
-            self.keyboard().listen()
-            time.sleep(self.config().get("script_sleep"))
-
     def view(self):
         if self.m_view:
             return self.m_view
@@ -164,8 +165,9 @@ class librecoin:
         self.m_view = lc_view(self)
         return self.m_view
 
-    def quit(self):
-        self.m_run = False
+    def stop(self):
+        self.m_stop = True
+        self.m_loop = False
 
     def thread(self):
         if self.m_thread:

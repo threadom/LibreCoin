@@ -69,4 +69,4 @@ App will be oriented to multi threaded python application
 
 ### What's new
 
-###### [Look into documents/whats new folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/whatsnew)
+###### [Look into documents/whats new folder for more.](https://github.com/threadom/LibreERP/tree/main/documents/whats%20new)
